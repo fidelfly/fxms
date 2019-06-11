@@ -11,7 +11,7 @@ import (
 
 var Server *authx.Server
 
-func SetupAuthServer(db *db.DbInstance, authCfg *oauth2.Config) (server *authx.Server, err error) {
+func SetupAuthServer(db *db.Instance, authCfg *oauth2.Config) (server *authx.Server, err error) {
 	store, err := oauth2.NewDbStore(db)
 	if err != nil {
 		return
@@ -28,7 +28,7 @@ func SetupAuthServer(db *db.DbInstance, authCfg *oauth2.Config) (server *authx.S
 	return
 }
 
-func Initializer(instance *db.DbInstance, authCfg *oauth2.Config) micro.Option {
+func Initializer(instance *db.Instance, authCfg *oauth2.Config) micro.Option {
 	return func(options *micro.Options) {
 		as, err := SetupAuthServer(instance, authCfg)
 		if err != nil {

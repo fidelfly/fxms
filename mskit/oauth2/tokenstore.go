@@ -12,7 +12,7 @@ type dbStore struct {
 }
 
 //export
-func NewDbStore(instance *db.DbInstance) (store *dbStore, err error) {
+func NewDbStore(instance *db.Instance) (store *dbStore, err error) {
 	engine, err := db.InitEngine(instance)
 	if err != nil {
 		return

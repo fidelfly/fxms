@@ -9,7 +9,7 @@ import (
 var Engine *xorm.Engine
 
 //export
-func Initializer(instance *DbInstance) micro.Option {
+func Initializer(instance *Instance) micro.Option {
 	return func(options *micro.Options) {
 		engine, err := InitEngine(instance)
 		if err != nil {

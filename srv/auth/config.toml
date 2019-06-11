@@ -1,0 +1,16 @@
+Version = "0.0.1"
+
+LogLevel = "debug"
+
+[Database]
+Host = "127.0.0.1"
+Port = 3306
+Schema = "fxms"
+User = "fxms"
+Password = "fxmspwd"
+
+[AuthCfg]
+    [[AuthCfg.Clients]]
+    ID = "fxms"
+    Secret = "fxmssecret"
+    Domain = "https://127.0.0.1:8080"

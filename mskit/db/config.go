@@ -2,7 +2,7 @@ package db
 
 import "fmt"
 
-type DbInstance struct {
+type Instance struct {
 	Host     string
 	Port     int64
 	Schema   string
@@ -10,10 +10,10 @@ type DbInstance struct {
 	Password string
 }
 
-func (db DbInstance) getUrl() string {
+func (db Instance) getUrl() string {
 	return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&loc=Local", db.User, db.Password, db.Host, db.Port, db.Schema)
 }
 
-func (db DbInstance) getTarget() string {
+func (db Instance) getTarget() string {
 	return fmt.Sprintf("%s:%d", db.Host, db.Port)
 }

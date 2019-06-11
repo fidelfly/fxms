@@ -6,7 +6,9 @@ import (
 )
 
 type cfg struct {
-	Database db.DbInstance
+	Version  string
+	LogLevel string
+	Database db.Instance
 	AuthCfg  oauth2.Config
 }
 
