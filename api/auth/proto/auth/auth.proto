@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package com.fxms.api.auth;
+option go_package="auth";
+
+import "github.com/micro/go-micro/api/proto/api.proto";
+
+service Auth {
+	rpc Call(go.api.Request) returns (go.api.Response) {}
+}
+
+message Request {
+	string name = 1;
+}
+
+message Response {
+	string msg = 1;
+}
