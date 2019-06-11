@@ -1,0 +1,55 @@
+version: "3"
+services:
+  consul:
+    command: -server -bootstrap -rejoin
+    image: progrium/consul:latest
+    hostname: "registry"
+    ports:
+      - "8300:8300"
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:53/udp"
+  api:
+    command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10 api --handler=web --namespace=com.fxms.web
+    image: microhq/micro
+    container_name: api
+    links:
+      - consul
+      - centerWeb
+    ports:
+      - "8080:8080"
+    environment:
+      - MICRO_API_HANDLER=web
+      - MICRO_NAMESPACE=com.fxms.web
+  proxy:
+    command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10 proxy
+    image: microhq/micro
+    container_name: proxy
+    links:
+      - consul
+    ports:
+      - "8081:8081"
+  web:
+    command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10 web
+    image: microhq/micro
+    links:
+      - consul
+    ports:
+      - "8082:8082"
+  #centerWeb:
+  #  command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10
+  #  build: ./web/center
+  #  links:
+  #    - consul
+  #  ports:
+  #    - "0:8083"
+  centerWeb:
+    command: -- --registry_address=registry:8500 --register_interval=5 --register_ttl=10
+    build:
+      context: web/center
+      dockerfile: web/center/Dockerfile.debug
+    privileged: true
+    links:
+      - consul
+    ports:
+      - "40000:40000"
