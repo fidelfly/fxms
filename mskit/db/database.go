@@ -7,12 +7,21 @@ import (
 )
 
 //export
-func InitEngine(instance *Instance) (engine *xorm.Engine, err error) {
+func InitEngine(instance *Instance) (err error) {
+	engine, err := NewEngine(instance)
+	if err == nil {
+		Engine = engine
+	}
+	return
+}
+
+//export
+func NewEngine(instance *Instance) (engine *xorm.Engine, err error) {
 	engine, err = xorm.NewEngine("mysql", instance.getUrl())
 	if err == nil {
 		terr := engine.Ping()
 		if terr == nil {
-			logx.Infof("Database(%s) is connected!", instance.getTarget())
+			logx.Infof("Database(%s) is available!", instance.getTarget())
 		} else {
 			logx.Errorf("Can't connect to database(%s)", instance.getTarget())
 		}

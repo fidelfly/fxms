@@ -6,7 +6,6 @@ import (
 	"github.com/micro/go-micro/util/log"
 
 	"github.com/fidelfly/fxms/mskit"
-	"github.com/fidelfly/fxms/mskit/confx"
 	"github.com/fidelfly/fxms/srv/auth/config"
 	"github.com/fidelfly/fxms/srv/auth/handler"
 	"github.com/fidelfly/fxms/srv/auth/oauth2"
@@ -26,7 +25,7 @@ func main() {
 
 	// Initialise service
 	service.Init(
-		confx.Initializer(config.Current()),
+		mskit.ConfigInitializer(config.Current()),
 		mskit.LogInitializer("warning"),
 		oauth2.Initializer(config.Database, config.AuthCfg),
 	)

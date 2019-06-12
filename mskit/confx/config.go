@@ -1,11 +1,8 @@
 package confx
 
 import (
-	"fmt"
 	"os"
-	"strings"
 
-	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/config"
 	"github.com/micro/go-micro/config/encoder"
 	"github.com/micro/go-micro/config/encoder/toml"
@@ -45,16 +42,4 @@ func EnvConfig(prefix ...string) source.Source {
 //export
 func ConsulConfig(address string, prefix string) source.Source {
 	return consul.NewSource(consul.WithAddress(address), consul.WithPrefix(prefix))
-}
-
-func Initializer(cfg interface{}, files ...string) micro.Option {
-	return func(options *micro.Options) {
-		name := options.Server.Options().Name
-		cfgFiles := files
-		if len(cfgFiles) == 0 {
-			cfgFiles = append(cfgFiles, "/config.toml", fmt.Sprintf("/%s.toml", strings.ReplaceAll(name, ".", "_")))
-		}
-
-		ReadConfig(cfg, cfgFiles...)
-	}
 }
