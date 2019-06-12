@@ -26,7 +26,7 @@ func main() {
 	// Initialise service
 	service.Init(
 		mskit.ConfigInitializer(config.Current()),
-		mskit.LogInitializer("warning"),
+		mskit.LogInitializer(),
 		oauth2.Initializer(config.Database, config.AuthCfg),
 	)
 

@@ -1,4 +1,4 @@
-package confx
+package conf
 
 import (
 	"os"

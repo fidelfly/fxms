@@ -5,6 +5,7 @@ go 1.12
 require (
 	github.com/fidelfly/fxgo v0.0.0
 	github.com/fidelfly/fxms/mskit v0.0.0
+	github.com/golang/protobuf v1.3.1
 	github.com/micro/go-micro v1.5.0
 )
 

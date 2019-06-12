@@ -9,8 +9,8 @@ Schema = "fxms"
 User = "fxms"
 Password = "fxmspwd"
 
-[AuthCfg]
-    [[AuthCfg.Clients]]
+[Auth]
+    [[Auth.Clients]]
     ID = "fxms"
     Secret = "fxmssecret"
     Domain = "https://127.0.0.1:8080"

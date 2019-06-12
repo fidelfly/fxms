@@ -7,7 +7,7 @@ import (
 )
 
 //export
-func InitEngine(instance *Instance) (err error) {
+func InitEngine(instance *Config) (err error) {
 	engine, err := NewEngine(instance)
 	if err == nil {
 		Engine = engine
@@ -16,7 +16,7 @@ func InitEngine(instance *Instance) (err error) {
 }
 
 //export
-func NewEngine(instance *Instance) (engine *xorm.Engine, err error) {
+func NewEngine(instance *Config) (engine *xorm.Engine, err error) {
 	engine, err = xorm.NewEngine("mysql", instance.getUrl())
 	if err == nil {
 		terr := engine.Ping()
