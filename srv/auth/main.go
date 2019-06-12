@@ -10,6 +10,7 @@ import (
 	"github.com/fidelfly/fxms/srv/auth/handler"
 	"github.com/fidelfly/fxms/srv/auth/oauth2"
 	"github.com/fidelfly/fxms/srv/auth/proto/auth"
+	"github.com/fidelfly/fxms/srv/auth/proto/token"
 	"github.com/fidelfly/fxms/srv/auth/subscriber"
 )
 
@@ -27,12 +28,14 @@ func main() {
 	service.Init(
 		mskit.ConfigInitializer(config.Current()),
 		mskit.LogInitializer(),
-		oauth2.Initializer(config.Database, config.AuthCfg),
+		oauth2.Initializer(config.Database),
 	)
 
 	logx.CaptureError(
 		// Register Handler
 		auth.RegisterAuthHandler(service.Server(), new(handler.Auth)),
+
+		token.RegisterTokenHandler(service.Server(), new(handler.Token)),
 
 		// Register Struct as Subscriber
 		micro.RegisterSubscriber(srvName, service.Server(), new(subscriber.Auth)),

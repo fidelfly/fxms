@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package com.fxms.srv.auth;
+option go_package="token";
+
+import "google/protobuf/empty.proto";
+
+service Token {
+	rpc Create (TokenRequest) returns (ErrorResponse) {}
+
+	rpc RemoveByCode (StringValue) returns (ErrorResponse) {}
+	rpc RemoveByAccess (StringValue) returns (ErrorResponse) {}
+	rpc RemoveByRefresh (StringValue) returns (ErrorResponse) {}
+
+	rpc GetByCode (StringValue) returns (TokenResponse) {}
+	rpc GetByAccess (StringValue) returns (TokenResponse) {}
+	rpc GetByRefresh (StringValue) returns (TokenResponse) {}
+}
+
+message TokenData {
+	string client_id = 1;
+	string user_id = 2;
+	string redirect_uri = 3;
+	string scope = 4;
+	string code = 5;
+	int64 code_create_at = 6;
+	int64 code_expires_in = 7;
+	string access = 8;
+	int64 access_create_at = 9;
+	int64 access_expires_in = 10;
+	string refresh = 11;
+	int64 refresh_create_at= 12;
+	int64 refresh_expires_in = 13;
+}
+
+message StringValue {
+	string value = 1;
+}
+
+message TokenRequest {
+	string id = 1;
+	string name = 2;
+	TokenData token = 3;
+}
+
+message ErrorResponse {
+	string err_message = 1;
+}
+
+message TokenResponse {
+	string err_message = 1;
+	TokenData token = 2;
+}

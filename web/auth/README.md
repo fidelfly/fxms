@@ -5,7 +5,7 @@ This is the Auth service
 Generated with
 
 ```
-micro new github.com/fidelfly/fxms/api/auth --namespace=go.micro --fqdn=com.fxms.api.auth --type=api
+micro new github.com/fidelfly/fxms/web/auth --namespace=go.micro --fqdn=com.fxms.web.auth --type=web
 ```
 
 ## Getting Started
@@ -16,8 +16,8 @@ micro new github.com/fidelfly/fxms/api/auth --namespace=go.micro --fqdn=com.fxms
 
 ## Configuration
 
-- FQDN: com.fxms.api.auth
-- Type: api
+- FQDN: com.fxms.web.auth
+- Type: web
 - Alias: auth
 
 ## Dependencies
@@ -46,7 +46,7 @@ make build
 
 Run the service
 ```
-./auth-api
+./auth-web
 ```
 
 Build a docker image

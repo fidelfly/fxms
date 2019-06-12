@@ -1,0 +1,9 @@
+Version = "0.0.1"
+
+LogLevel = "debug"
+
+[Auth]
+    [[Auth.Clients]]
+    ID = "fxms"
+    Secret = "fxmssecret"
+    Domain = "https://127.0.0.1:8080"
