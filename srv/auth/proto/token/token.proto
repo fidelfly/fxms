@@ -1,20 +1,22 @@
 syntax = "proto3";
 
 package com.fxms.srv.auth;
-option go_package="token";
+option go_package="github.com/fidelfly/fxms/srv/auth/proto/token";
 
 import "google/protobuf/empty.proto";
+import "mskit/proto/base/base.proto";
+import "mskit/proto/api/api.proto";
 
 service Token {
-	rpc Create (TokenRequest) returns (ErrorResponse) {}
+	rpc Create (TokenRequest) returns (google.protobuf.Empty) {}
 
-	rpc RemoveByCode (StringValue) returns (ErrorResponse) {}
-	rpc RemoveByAccess (StringValue) returns (ErrorResponse) {}
-	rpc RemoveByRefresh (StringValue) returns (ErrorResponse) {}
+	rpc RemoveByCode (mskit.base.StringValue) returns (google.protobuf.Empty) {}
+	rpc RemoveByAccess (mskit.base.StringValue) returns (google.protobuf.Empty) {}
+	rpc RemoveByRefresh (mskit.base.StringValue) returns (google.protobuf.Empty) {}
 
-	rpc GetByCode (StringValue) returns (TokenResponse) {}
-	rpc GetByAccess (StringValue) returns (TokenResponse) {}
-	rpc GetByRefresh (StringValue) returns (TokenResponse) {}
+	rpc GetByCode (mskit.base.StringValue) returns (TokenResponse) {}
+	rpc GetByAccess (mskit.base.StringValue) returns (TokenResponse) {}
+	rpc GetByRefresh (mskit.base.StringValue) returns (TokenResponse) {}
 }
 
 message TokenData {
@@ -33,18 +35,9 @@ message TokenData {
 	int64 refresh_expires_in = 13;
 }
 
-message StringValue {
-	string value = 1;
-}
-
 message TokenRequest {
-	string id = 1;
-	string name = 2;
-	TokenData token = 3;
-}
-
-message ErrorResponse {
-	string err_message = 1;
+	mskit.api.Request req_info = 1;
+	TokenData token = 2;
 }
 
 message TokenResponse {

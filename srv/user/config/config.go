@@ -1,8 +1,6 @@
 package config
 
 import (
-	oauth22 "github.com/fidelfly/fxms/web/auth/oauth2"
-
 	"github.com/fidelfly/fxms/mskit/conf"
 	"github.com/fidelfly/fxms/mskit/db"
 )
@@ -10,7 +8,6 @@ import (
 type cfg struct {
 	conf.MsConfig
 	Database *db.Config
-	Auth     *oauth22.Config
 }
 
 func (c cfg) GetDbConfig() *db.Config {
@@ -24,5 +21,3 @@ func Current() *cfg {
 }
 
 var Database = myCfg.Database
-
-var AuthCfg = myCfg.Auth

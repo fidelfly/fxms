@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package mskit.base;
+
+option go_package="github.com/fidelfly/fxms/mskit/proto/base";
+
+message StringValue {
+	string value = 1;
+}

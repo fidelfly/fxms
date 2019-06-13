@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectTasksOptions">
     <TaskOptions isEnabled="true">
-      <option name="arguments" value="--proto_path=.:/Users/fidelfly/workshop/go/src --proto_path=. --go_out=. --micro_out=. $FileName$" />
+      <option name="arguments" value="--proto_path=.:/Users/fidelfly/workshop/go/src:$ProjectFileDir$ --proto_path=. --go_out=paths=source_relative:. --micro_out=paths=source_relative:. $FileName$" />
       <option name="checkSyntaxErrors" value="true" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />

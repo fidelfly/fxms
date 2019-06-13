@@ -5,7 +5,9 @@ package user
 
 import (
 	fmt "fmt"
+	api "github.com/fidelfly/fxms/mskit/proto/api"
 	proto "github.com/golang/protobuf/proto"
+	_ "github.com/golang/protobuf/ptypes/timestamp"
 	math "math"
 )
 
@@ -37,6 +39,10 @@ type UserService interface {
 	Call(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 	Stream(ctx context.Context, in *StreamingRequest, opts ...client.CallOption) (User_StreamService, error)
 	PingPong(ctx context.Context, opts ...client.CallOption) (User_PingPongService, error)
+	Create(ctx context.Context, in *CreateRequest, opts ...client.CallOption) (*api.IdResponse, error)
+	Update(ctx context.Context, in *UpdateRequest, opts ...client.CallOption) (*api.IdResponse, error)
+	Read(ctx context.Context, in *ReadRequest, opts ...client.CallOption) (*UserData, error)
+	Delete(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*api.IdResponse, error)
 }
 
 type userService struct {
@@ -157,12 +163,56 @@ func (x *userServicePingPong) Recv() (*Pong, error) {
 	return m, nil
 }
 
+func (c *userService) Create(ctx context.Context, in *CreateRequest, opts ...client.CallOption) (*api.IdResponse, error) {
+	req := c.c.NewRequest(c.name, "User.Create", in)
+	out := new(api.IdResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userService) Update(ctx context.Context, in *UpdateRequest, opts ...client.CallOption) (*api.IdResponse, error) {
+	req := c.c.NewRequest(c.name, "User.Update", in)
+	out := new(api.IdResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userService) Read(ctx context.Context, in *ReadRequest, opts ...client.CallOption) (*UserData, error) {
+	req := c.c.NewRequest(c.name, "User.Read", in)
+	out := new(UserData)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userService) Delete(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*api.IdResponse, error) {
+	req := c.c.NewRequest(c.name, "User.Delete", in)
+	out := new(api.IdResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for User service
 
 type UserHandler interface {
 	Call(context.Context, *Request, *Response) error
 	Stream(context.Context, *StreamingRequest, User_StreamStream) error
 	PingPong(context.Context, User_PingPongStream) error
+	Create(context.Context, *CreateRequest, *api.IdResponse) error
+	Update(context.Context, *UpdateRequest, *api.IdResponse) error
+	Read(context.Context, *ReadRequest, *UserData) error
+	Delete(context.Context, *DeleteRequest, *api.IdResponse) error
 }
 
 func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.HandlerOption) error {
@@ -170,6 +220,10 @@ func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.Handl
 		Call(ctx context.Context, in *Request, out *Response) error
 		Stream(ctx context.Context, stream server.Stream) error
 		PingPong(ctx context.Context, stream server.Stream) error
+		Create(ctx context.Context, in *CreateRequest, out *api.IdResponse) error
+		Update(ctx context.Context, in *UpdateRequest, out *api.IdResponse) error
+		Read(ctx context.Context, in *ReadRequest, out *UserData) error
+		Delete(ctx context.Context, in *DeleteRequest, out *api.IdResponse) error
 	}
 	type User struct {
 		user
@@ -259,4 +313,20 @@ func (x *userPingPongStream) Recv() (*Ping, error) {
 		return nil, err
 	}
 	return m, nil
+}
+
+func (h *userHandler) Create(ctx context.Context, in *CreateRequest, out *api.IdResponse) error {
+	return h.UserHandler.Create(ctx, in, out)
+}
+
+func (h *userHandler) Update(ctx context.Context, in *UpdateRequest, out *api.IdResponse) error {
+	return h.UserHandler.Update(ctx, in, out)
+}
+
+func (h *userHandler) Read(ctx context.Context, in *ReadRequest, out *UserData) error {
+	return h.UserHandler.Read(ctx, in, out)
+}
+
+func (h *userHandler) Delete(ctx context.Context, in *DeleteRequest, out *api.IdResponse) error {
+	return h.UserHandler.Delete(ctx, in, out)
 }

@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package com.fxms.srv.auth;
-option go_package="auth";
+option go_package="github.com/fidelfly/fxms/srv/auth/proto/auth";
 
 service Auth {
 	rpc Call(Request) returns (Response) {}

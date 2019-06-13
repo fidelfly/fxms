@@ -64,6 +64,18 @@ func DbInitializer(cfgs ...*db.Config) micro.Option {
 	}
 }
 
+func DbSynchronize(targets ...interface{}) micro.Option {
+	return func(options *micro.Options) {
+		if db.Engine == nil {
+			panic("database engine is not initialized")
+		}
+
+		if len(targets) > 0 {
+			db.Engine.Sync(targets...)
+		}
+	}
+}
+
 //export
 func WebDbInitializer(cfgs ...*db.Config) web.Option {
 	return func(options *web.Options) {

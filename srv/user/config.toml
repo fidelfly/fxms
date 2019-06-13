@@ -1,0 +1,10 @@
+Version = "0.0.1"
+
+LogLevel = "debug"
+
+[Database]
+Host = "127.0.0.1"
+Port = 3306
+Schema = "fxms"
+User = "fxms"
+Password = "fxmspwd"

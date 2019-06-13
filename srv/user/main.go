@@ -1,12 +1,15 @@
 package main
 
 import (
-	"github.com/micro/go-micro/util/log"
+	"github.com/fidelfly/fxgo/logx"
 	"github.com/micro/go-micro"
-	"github.com/fidelfly/fxms/srv/user/handler"
-	"github.com/fidelfly/fxms/srv/user/subscriber"
 
-	user "github.com/fidelfly/fxms/srv/user/proto/user"
+	"github.com/fidelfly/fxms/mskit"
+	"github.com/fidelfly/fxms/srv/user/config"
+	"github.com/fidelfly/fxms/srv/user/handler"
+	"github.com/fidelfly/fxms/srv/user/proto/user"
+	"github.com/fidelfly/fxms/srv/user/res"
+	"github.com/fidelfly/fxms/srv/user/subscriber"
 )
 
 func main() {
@@ -17,19 +20,26 @@ func main() {
 	)
 
 	// Initialise service
-	service.Init()
+	service.Init(
+		mskit.ConfigInitializer(config.Current()),
+		mskit.LogInitializer(),
+		mskit.DbInitializer(),
+		mskit.DbSynchronize(new(res.User)),
+	)
 
-	// Register Handler
-	user.RegisterUserHandler(service.Server(), new(handler.User))
+	logx.CaptureError(
+		// Register Handler
+		user.RegisterUserHandler(service.Server(), new(handler.User)),
 
-	// Register Struct as Subscriber
-	micro.RegisterSubscriber("com.fxms.srv.user", service.Server(), new(subscriber.User))
+		// Register Struct as Subscriber
+		micro.RegisterSubscriber("com.fxms.srv.user", service.Server(), new(subscriber.User)),
 
-	// Register Function as Subscriber
-	micro.RegisterSubscriber("com.fxms.srv.user", service.Server(), subscriber.Handler)
+		// Register Function as Subscriber
+		micro.RegisterSubscriber("com.fxms.srv.user", service.Server(), subscriber.Handler),
+	)
 
 	// Run service
 	if err := service.Run(); err != nil {
-		log.Fatal(err)
+		logx.Panic(err)
 	}
 }
