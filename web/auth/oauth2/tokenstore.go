@@ -5,10 +5,10 @@ import (
 
 	"github.com/fidelfly/fxgo/authx"
 	"github.com/fidelfly/fxgo/logx"
-	"github.com/micro/go-micro/client"
 	"gopkg.in/oauth2.v3"
 
 	"github.com/fidelfly/fxms/mskit/proto/base"
+	"github.com/fidelfly/fxms/mskit/rpcc"
 	"github.com/fidelfly/fxms/srv/auth/proto/token"
 )
 
@@ -18,7 +18,7 @@ type tokenStore struct {
 }
 
 func NewTokenStore() *tokenStore {
-	c := token.NewTokenService("com.fxms.srv.auth", client.DefaultClient)
+	c := token.NewTokenService("com.fxms.srv.auth", rpcc.DefaultClient)
 	return &tokenStore{client: c, cache: authx.NewMemoryTokenStore()}
 }
 
