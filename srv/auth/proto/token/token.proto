@@ -4,19 +4,20 @@ package com.fxms.srv.auth;
 option go_package="github.com/fidelfly/fxms/srv/auth/proto/token";
 
 import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 import "mskit/proto/base/base.proto";
 import "mskit/proto/api/api.proto";
 
 service Token {
-	rpc Create (TokenRequest) returns (google.protobuf.Empty) {}
+	rpc Create (TokenData) returns (google.protobuf.Empty) {}
 
 	rpc RemoveByCode (mskit.base.StringValue) returns (google.protobuf.Empty) {}
 	rpc RemoveByAccess (mskit.base.StringValue) returns (google.protobuf.Empty) {}
 	rpc RemoveByRefresh (mskit.base.StringValue) returns (google.protobuf.Empty) {}
 
-	rpc GetByCode (mskit.base.StringValue) returns (TokenResponse) {}
-	rpc GetByAccess (mskit.base.StringValue) returns (TokenResponse) {}
-	rpc GetByRefresh (mskit.base.StringValue) returns (TokenResponse) {}
+	rpc GetByCode (mskit.base.StringValue) returns (TokenData) {}
+	rpc GetByAccess (mskit.base.StringValue) returns (TokenData) {}
+	rpc GetByRefresh (mskit.base.StringValue) returns (TokenData) {}
 }
 
 message TokenData {
@@ -25,22 +26,12 @@ message TokenData {
 	string redirect_uri = 3;
 	string scope = 4;
 	string code = 5;
-	int64 code_create_at = 6;
+	google.protobuf.Timestamp code_create_at = 6;
 	int64 code_expires_in = 7;
 	string access = 8;
-	int64 access_create_at = 9;
+	google.protobuf.Timestamp access_create_at = 9;
 	int64 access_expires_in = 10;
 	string refresh = 11;
-	int64 refresh_create_at= 12;
+	google.protobuf.Timestamp refresh_create_at= 12;
 	int64 refresh_expires_in = 13;
-}
-
-message TokenRequest {
-	mskit.api.Request req_info = 1;
-	TokenData token = 2;
-}
-
-message TokenResponse {
-	string err_message = 1;
-	TokenData token = 2;
 }

@@ -10,6 +10,7 @@ import (
 
 	"github.com/fidelfly/fxms/mskit/conf"
 	"github.com/fidelfly/fxms/mskit/db"
+	"github.com/fidelfly/fxms/mskit/msconst"
 )
 
 //export
@@ -109,6 +110,7 @@ func ConfigInitializer(cfg interface{}, files ...string) micro.Option {
 	}
 }
 
+//export
 func WebConfigInitializer(cfg interface{}, files ...string) web.Option {
 	return func(options *web.Options) {
 		name := options.Name
@@ -120,5 +122,18 @@ func WebConfigInitializer(cfg interface{}, files ...string) web.Option {
 		conf.ReadConfig(cfg, cfgFiles...)
 
 		msCfg = cfg
+	}
+}
+
+//export
+func ServiceInitiallizer() micro.Option {
+	return func(options *micro.Options) {
+		msconst.ConstOption(options)
+	}
+}
+
+func WebServiceInitiallizer() web.Option {
+	return func(options *web.Options) {
+		msconst.WebConstOption(options)
 	}
 }

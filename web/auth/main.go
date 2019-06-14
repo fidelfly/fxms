@@ -5,7 +5,8 @@ import (
 	"github.com/micro/go-micro/web"
 
 	"github.com/fidelfly/fxms/mskit"
-	"github.com/fidelfly/fxms/srv/auth/config"
+	"github.com/fidelfly/fxms/mskit/whdr"
+	"github.com/fidelfly/fxms/web/auth/config"
 	"github.com/fidelfly/fxms/web/auth/handler"
 	"github.com/fidelfly/fxms/web/auth/oauth2"
 )
@@ -19,6 +20,7 @@ func main() {
 
 	// initialise service
 	if err := service.Init(
+		mskit.WebServiceInitiallizer(),
 		mskit.WebConfigInitializer(config.Current()),
 		mskit.WebLogInitializer(),
 		oauth2.Initializer(config.AuthCfg),
@@ -28,9 +30,9 @@ func main() {
 	}
 
 	// register call handler
-	service.HandleFunc("/auth/call", handler.AuthCall)
+	service.HandleFunc("/auth/call", whdr.MsHandlerFunc(handler.AuthCall))
 
-	service.HandleFunc("/auth/token", oauth2.TokenHandler)
+	service.HandleFunc("/auth/token", whdr.MsHandlerFunc(oauth2.TokenHandler))
 
 	// run service
 	if err := service.Run(); err != nil {

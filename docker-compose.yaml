@@ -1,9 +1,23 @@
 version: "3"
 services:
+  db:
+    image: mysql:latest
+    container_name: database
+    networks:
+      mynet:
+        ipv4_address: 172.31.0.100
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: db123
   consul:
     command: -server -bootstrap -rejoin
     image: progrium/consul:latest
     hostname: "registry"
+    networks:
+      - mynet
     ports:
       - "8300:8300"
       - "8400:8400"
@@ -13,9 +27,12 @@ services:
     command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10 api --handler=web --namespace=com.fxms.web
     image: microhq/micro
     container_name: api
-    links:
-      - consul
-      - centerWeb
+    networks:
+      - mynet
+#    links:
+#      - consul
+#      - center-web
+#      - auth-srv
     ports:
       - "8080:8080"
     environment:
@@ -25,6 +42,8 @@ services:
     command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10 proxy
     image: microhq/micro
     container_name: proxy
+    networks:
+      - mynet
     links:
       - consul
     ports:
@@ -32,24 +51,79 @@ services:
   web:
     command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10 web
     image: microhq/micro
+    networks:
+      - mynet
     links:
       - consul
     ports:
       - "8082:8082"
-  #centerWeb:
-  #  command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10
-  #  build: ./web/center
-  #  links:
-  #    - consul
-  #  ports:
-  #    - "0:8083"
-  centerWeb:
+#  auth-srv:
+#    command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10
+#    build: ./srv/auth
+#    container_name: auth-srv
+#    networks:
+#      - mynet
+#   links:
+#     - consul
+#     - db
+#    depends_on:
+#      - db
+  auth-srv:
     command: -- --registry_address=registry:8500 --register_interval=5 --register_ttl=10
     build:
-      context: web/center
-      dockerfile: web/center/Dockerfile.debug
+      context: srv/auth
+      dockerfile: Dockerfile.debug
     privileged: true
-    links:
-      - consul
+    networks:
+      - mynet
+#    links:
+#      - consul
+#      - db
+    ports:
+      - "40001:40000"
+#  auth-web:
+#    command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10
+#    build: ./web/auth
+#    networks:
+#      - mynet
+#    links:
+#      - consul
+  auth-web:
+    command: -- --registry_address=registry:8500 --register_interval=5 --register_ttl=10
+    build:
+      context: web/auth
+      dockerfile: Dockerfile.debug
+    container_name: auth-web
+    privileged: true
+    networks:
+      - mynet
+#   links:
+#     - consul
+#     - auth-srv
     ports:
       - "40000:40000"
+#  center-web:
+#    command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10
+#    build: ./web/center
+#    links:
+#      - consul
+#  center-web:
+#    command: -- --registry_address=registry:8500 --register_interval=5 --register_ttl=10
+#    build:
+#      context: web/center
+#      dockerfile: web/center/Dockerfile.debug
+#    privileged: true
+#    networks:
+#      - mynet
+#    links:
+#      - consul
+#    ports:
+#      - "40000:40000"
+
+
+networks:
+  mynet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.31.0.0/16

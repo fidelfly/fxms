@@ -4,6 +4,8 @@ import (
 	"time"
 
 	"gopkg.in/oauth2.v3"
+
+	"github.com/fidelfly/fxms/mskit/proto"
 )
 
 type info struct {
@@ -17,15 +19,30 @@ func NewTokenData(info oauth2.TokenInfo) *TokenData {
 		RedirectUri:      info.GetRedirectURI(),
 		Scope:            info.GetScope(),
 		Code:             info.GetCode(),
-		CodeCreateAt:     info.GetCodeCreateAt().Unix(),
+		CodeCreateAt:     proto.ToProtoTime(info.GetCodeCreateAt()),
 		CodeExpiresIn:    int64(info.GetCodeExpiresIn()),
 		Access:           info.GetAccess(),
-		AccessCreateAt:   info.GetAccessCreateAt().Unix(),
+		AccessCreateAt:   proto.ToProtoTime(info.GetAccessCreateAt()),
 		AccessExpiresIn:  int64(info.GetAccessExpiresIn()),
 		Refresh:          info.GetRefresh(),
-		RefreshCreateAt:  info.GetRefreshCreateAt().Unix(),
+		RefreshCreateAt:  proto.ToProtoTime(info.GetRefreshCreateAt()),
 		RefreshExpiresIn: int64(info.GetRefreshExpiresIn()),
 	}
+}
+func (td *TokenData) FillData(info oauth2.TokenInfo) {
+	td.ClientId = info.GetClientID()
+	td.UserId = info.GetUserID()
+	td.RedirectUri = info.GetRedirectURI()
+	td.Scope = info.GetScope()
+	td.Code = info.GetCode()
+	td.CodeCreateAt = proto.ToProtoTime(info.GetCodeCreateAt())
+	td.CodeExpiresIn = int64(info.GetCodeExpiresIn())
+	td.Access = info.GetAccess()
+	td.AccessCreateAt = proto.ToProtoTime(info.GetAccessCreateAt())
+	td.AccessExpiresIn = int64(info.GetAccessExpiresIn())
+	td.Refresh = info.GetRefresh()
+	td.RefreshCreateAt = proto.ToProtoTime(info.GetRefreshCreateAt())
+	td.RefreshExpiresIn = int64(info.GetRefreshExpiresIn())
 }
 
 // NewTokenInfoWrapper create to TokenInfoWrapper model instance
@@ -90,12 +107,12 @@ func (t *info) SetCode(code string) {
 
 // GetCodeCreateAt create Time
 func (t *info) GetCodeCreateAt() time.Time {
-	return time.Unix(t.CodeCreateAt, 0)
+	return proto.ToTime(t.CodeCreateAt)
 }
 
 // SetCodeCreateAt create Time
 func (t *info) SetCodeCreateAt(createAt time.Time) {
-	t.CodeCreateAt = createAt.Unix()
+	t.CodeCreateAt = proto.ToProtoTime(createAt)
 }
 
 // GetCodeExpiresIn the lifetime in seconds of the authorization code
@@ -120,12 +137,12 @@ func (t *info) SetAccess(access string) {
 
 // GetAccessCreateAt create Time
 func (t *info) GetAccessCreateAt() time.Time {
-	return time.Unix(t.AccessCreateAt, 0)
+	return proto.ToTime(t.AccessCreateAt)
 }
 
 // SetAccessCreateAt create Time
 func (t *info) SetAccessCreateAt(createAt time.Time) {
-	t.AccessCreateAt = createAt.Unix()
+	t.AccessCreateAt = proto.ToProtoTime(createAt)
 }
 
 // GetAccessExpiresIn the lifetime in seconds of the access TokenInfoWrapper
@@ -150,12 +167,12 @@ func (t *info) SetRefresh(refresh string) {
 
 // GetRefreshCreateAt create Time
 func (t *info) GetRefreshCreateAt() time.Time {
-	return time.Unix(t.RefreshCreateAt, 0)
+	return proto.ToTime(t.RefreshCreateAt)
 }
 
 // SetRefreshCreateAt create Time
 func (t *info) SetRefreshCreateAt(createAt time.Time) {
-	t.RefreshCreateAt = createAt.Unix()
+	t.RefreshCreateAt = proto.ToProtoTime(createAt)
 }
 
 // GetRefreshExpiresIn the lifetime in seconds of the refresh TokenInfoWrapper

@@ -7,16 +7,6 @@ import (
 
 var msCfg interface{}
 
-func GetVersion() string {
-	if msCfg == nil {
-		return ""
-	}
-	if ms, ok := msCfg.(conf.MsConfigurable); ok {
-		return ms.GetVersion()
-	}
-	return ""
-}
-
 func GetLogLevel() string {
 	if msCfg == nil {
 		return ""
@@ -31,8 +21,8 @@ func GetDbConfig() *db.Config {
 	if msCfg == nil {
 		return nil
 	}
-	if db, ok := msCfg.(db.Configurable); ok {
-		return db.GetDbConfig()
+	if cfg, ok := msCfg.(db.Configurable); ok {
+		return cfg.GetDbConfig()
 	}
 	return nil
 }

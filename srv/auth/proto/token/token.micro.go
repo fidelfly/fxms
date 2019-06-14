@@ -9,6 +9,7 @@ import (
 	base "github.com/fidelfly/fxms/mskit/proto/base"
 	proto "github.com/golang/protobuf/proto"
 	empty "github.com/golang/protobuf/ptypes/empty"
+	_ "github.com/golang/protobuf/ptypes/timestamp"
 	math "math"
 )
 
@@ -37,13 +38,13 @@ var _ server.Option
 // Client API for Token service
 
 type TokenService interface {
-	Create(ctx context.Context, in *TokenRequest, opts ...client.CallOption) (*empty.Empty, error)
+	Create(ctx context.Context, in *TokenData, opts ...client.CallOption) (*empty.Empty, error)
 	RemoveByCode(ctx context.Context, in *base.StringValue, opts ...client.CallOption) (*empty.Empty, error)
 	RemoveByAccess(ctx context.Context, in *base.StringValue, opts ...client.CallOption) (*empty.Empty, error)
 	RemoveByRefresh(ctx context.Context, in *base.StringValue, opts ...client.CallOption) (*empty.Empty, error)
-	GetByCode(ctx context.Context, in *base.StringValue, opts ...client.CallOption) (*TokenResponse, error)
-	GetByAccess(ctx context.Context, in *base.StringValue, opts ...client.CallOption) (*TokenResponse, error)
-	GetByRefresh(ctx context.Context, in *base.StringValue, opts ...client.CallOption) (*TokenResponse, error)
+	GetByCode(ctx context.Context, in *base.StringValue, opts ...client.CallOption) (*TokenData, error)
+	GetByAccess(ctx context.Context, in *base.StringValue, opts ...client.CallOption) (*TokenData, error)
+	GetByRefresh(ctx context.Context, in *base.StringValue, opts ...client.CallOption) (*TokenData, error)
 }
 
 type tokenService struct {
@@ -64,7 +65,7 @@ func NewTokenService(name string, c client.Client) TokenService {
 	}
 }
 
-func (c *tokenService) Create(ctx context.Context, in *TokenRequest, opts ...client.CallOption) (*empty.Empty, error) {
+func (c *tokenService) Create(ctx context.Context, in *TokenData, opts ...client.CallOption) (*empty.Empty, error) {
 	req := c.c.NewRequest(c.name, "Token.Create", in)
 	out := new(empty.Empty)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -104,9 +105,9 @@ func (c *tokenService) RemoveByRefresh(ctx context.Context, in *base.StringValue
 	return out, nil
 }
 
-func (c *tokenService) GetByCode(ctx context.Context, in *base.StringValue, opts ...client.CallOption) (*TokenResponse, error) {
+func (c *tokenService) GetByCode(ctx context.Context, in *base.StringValue, opts ...client.CallOption) (*TokenData, error) {
 	req := c.c.NewRequest(c.name, "Token.GetByCode", in)
-	out := new(TokenResponse)
+	out := new(TokenData)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -114,9 +115,9 @@ func (c *tokenService) GetByCode(ctx context.Context, in *base.StringValue, opts
 	return out, nil
 }
 
-func (c *tokenService) GetByAccess(ctx context.Context, in *base.StringValue, opts ...client.CallOption) (*TokenResponse, error) {
+func (c *tokenService) GetByAccess(ctx context.Context, in *base.StringValue, opts ...client.CallOption) (*TokenData, error) {
 	req := c.c.NewRequest(c.name, "Token.GetByAccess", in)
-	out := new(TokenResponse)
+	out := new(TokenData)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -124,9 +125,9 @@ func (c *tokenService) GetByAccess(ctx context.Context, in *base.StringValue, op
 	return out, nil
 }
 
-func (c *tokenService) GetByRefresh(ctx context.Context, in *base.StringValue, opts ...client.CallOption) (*TokenResponse, error) {
+func (c *tokenService) GetByRefresh(ctx context.Context, in *base.StringValue, opts ...client.CallOption) (*TokenData, error) {
 	req := c.c.NewRequest(c.name, "Token.GetByRefresh", in)
-	out := new(TokenResponse)
+	out := new(TokenData)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -137,24 +138,24 @@ func (c *tokenService) GetByRefresh(ctx context.Context, in *base.StringValue, o
 // Server API for Token service
 
 type TokenHandler interface {
-	Create(context.Context, *TokenRequest, *empty.Empty) error
+	Create(context.Context, *TokenData, *empty.Empty) error
 	RemoveByCode(context.Context, *base.StringValue, *empty.Empty) error
 	RemoveByAccess(context.Context, *base.StringValue, *empty.Empty) error
 	RemoveByRefresh(context.Context, *base.StringValue, *empty.Empty) error
-	GetByCode(context.Context, *base.StringValue, *TokenResponse) error
-	GetByAccess(context.Context, *base.StringValue, *TokenResponse) error
-	GetByRefresh(context.Context, *base.StringValue, *TokenResponse) error
+	GetByCode(context.Context, *base.StringValue, *TokenData) error
+	GetByAccess(context.Context, *base.StringValue, *TokenData) error
+	GetByRefresh(context.Context, *base.StringValue, *TokenData) error
 }
 
 func RegisterTokenHandler(s server.Server, hdlr TokenHandler, opts ...server.HandlerOption) error {
 	type token interface {
-		Create(ctx context.Context, in *TokenRequest, out *empty.Empty) error
+		Create(ctx context.Context, in *TokenData, out *empty.Empty) error
 		RemoveByCode(ctx context.Context, in *base.StringValue, out *empty.Empty) error
 		RemoveByAccess(ctx context.Context, in *base.StringValue, out *empty.Empty) error
 		RemoveByRefresh(ctx context.Context, in *base.StringValue, out *empty.Empty) error
-		GetByCode(ctx context.Context, in *base.StringValue, out *TokenResponse) error
-		GetByAccess(ctx context.Context, in *base.StringValue, out *TokenResponse) error
-		GetByRefresh(ctx context.Context, in *base.StringValue, out *TokenResponse) error
+		GetByCode(ctx context.Context, in *base.StringValue, out *TokenData) error
+		GetByAccess(ctx context.Context, in *base.StringValue, out *TokenData) error
+		GetByRefresh(ctx context.Context, in *base.StringValue, out *TokenData) error
 	}
 	type Token struct {
 		token
@@ -167,7 +168,7 @@ type tokenHandler struct {
 	TokenHandler
 }
 
-func (h *tokenHandler) Create(ctx context.Context, in *TokenRequest, out *empty.Empty) error {
+func (h *tokenHandler) Create(ctx context.Context, in *TokenData, out *empty.Empty) error {
 	return h.TokenHandler.Create(ctx, in, out)
 }
 
@@ -183,14 +184,14 @@ func (h *tokenHandler) RemoveByRefresh(ctx context.Context, in *base.StringValue
 	return h.TokenHandler.RemoveByRefresh(ctx, in, out)
 }
 
-func (h *tokenHandler) GetByCode(ctx context.Context, in *base.StringValue, out *TokenResponse) error {
+func (h *tokenHandler) GetByCode(ctx context.Context, in *base.StringValue, out *TokenData) error {
 	return h.TokenHandler.GetByCode(ctx, in, out)
 }
 
-func (h *tokenHandler) GetByAccess(ctx context.Context, in *base.StringValue, out *TokenResponse) error {
+func (h *tokenHandler) GetByAccess(ctx context.Context, in *base.StringValue, out *TokenData) error {
 	return h.TokenHandler.GetByAccess(ctx, in, out)
 }
 
-func (h *tokenHandler) GetByRefresh(ctx context.Context, in *base.StringValue, out *TokenResponse) error {
+func (h *tokenHandler) GetByRefresh(ctx context.Context, in *base.StringValue, out *TokenData) error {
 	return h.TokenHandler.GetByRefresh(ctx, in, out)
 }

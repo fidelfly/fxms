@@ -1,0 +1,25 @@
+# Compile stage
+FROM golang:1.11.5-alpine3.9 AS build-env
+ENV CGO_ENABLED 0
+
+# Compile Delve
+RUN apk add --no-cache git
+RUN go get github.com/derekparker/delve/cmd/dlv
+
+# Final stage
+FROM alpine:3.9
+
+# Port 8080 belongs to our application, 40000 belongs to Delve
+EXPOSE 40000
+
+# Allow delve to run on Alpine based containers.
+RUN apk add --no-cache libc6-compat
+
+COPY --from=build-env /go/bin/dlv /
+
+ADD config.toml /config.toml
+ADD auth-srv /auth-srv
+WORKDIR /
+
+# Run delve
+ENTRYPOINT ["/dlv", "--listen=:40000", "--headless=true", "--api-version=2", "--accept-multiclient", "exec", "/auth-srv"]

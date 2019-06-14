@@ -3,8 +3,10 @@ package handler
 import (
 	"context"
 
+	"github.com/fidelfly/fxgo/logx"
 	"github.com/micro/go-micro/util/log"
 
+	"github.com/fidelfly/fxms/mskit/msctx"
 	"github.com/fidelfly/fxms/srv/auth/proto/auth"
 )
 
@@ -13,6 +15,8 @@ type Auth struct{}
 // Call is a single request handler called via client.Call or the generated client code
 func (e *Auth) Call(ctx context.Context, req *auth.Request, rsp *auth.Response) error {
 	log.Log("Received Auth.Call request")
+	logx.Infof("TraceID = %s", msctx.GetTraceID(ctx))
+	logx.Infof("Call From Service = %s", msctx.GetFromService(ctx))
 	rsp.Msg = "Hello " + req.Name
 	return nil
 }

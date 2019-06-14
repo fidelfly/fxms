@@ -26,6 +26,7 @@ func main() {
 
 	// Initialise service
 	service.Init(
+		mskit.ServiceInitiallizer(),
 		mskit.ConfigInitializer(config.Current()),
 		mskit.LogInitializer(),
 		oauth2.Initializer(config.Database),

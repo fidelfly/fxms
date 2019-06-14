@@ -1,13 +1,11 @@
-Version = "0.0.1"
-
 LogLevel = "debug"
 
 [Database]
-Host = "127.0.0.1"
+Host = "172.31.0.100"
 Port = 3306
-Schema = "fxms"
+Schema = "fxmsdb"
 User = "fxms"
-Password = "fxmspwd"
+Password = "fxms123456"
 
 [Auth]
     [[Auth.Clients]]
