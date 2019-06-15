@@ -72,7 +72,9 @@ func (s *tokenStore) GetByCode(code string) (oauth2.TokenInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-	return token.NewTokenInfo(res), nil
+	ti = token.NewTokenInfo(res)
+	logx.CaptureError(s.cache.Create(ti))
+	return ti, nil
 }
 
 // use the access token for token information data
@@ -85,7 +87,9 @@ func (s *tokenStore) GetByAccess(access string) (oauth2.TokenInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-	return token.NewTokenInfo(res), nil
+	ti = token.NewTokenInfo(res)
+	logx.CaptureError(s.cache.Create(ti))
+	return ti, nil
 }
 
 // use the refresh token for token information data
@@ -98,5 +102,7 @@ func (s *tokenStore) GetByRefresh(refresh string) (oauth2.TokenInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-	return token.NewTokenInfo(res), nil
+	ti = token.NewTokenInfo(res)
+	logx.CaptureError(s.cache.Create(ti))
+	return ti, nil
 }

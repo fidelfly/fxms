@@ -64,7 +64,8 @@ func (t *Token) GetByCode(ctx context.Context, req *base.StringValue, res *token
 		if err != nil {
 			return err
 		}
-		res = token.NewTokenData(info)
+		res.FillData(info)
+		//res = token.NewTokenData(info)
 		return nil
 	}
 	return errors.New("code is empty")
@@ -76,7 +77,8 @@ func (t *Token) GetByAccess(ctx context.Context, req *base.StringValue, res *tok
 		if err != nil {
 			return err
 		}
-		res = token.NewTokenData(info)
+		res.FillData(info)
+		//res = token.NewTokenData(info)
 		return nil
 	}
 	return errors.New("access is empty")
@@ -88,7 +90,8 @@ func (t *Token) GetByRefresh(ctx context.Context, req *base.StringValue, res *to
 		if err != nil {
 			return err
 		}
-		res = token.NewTokenData(info)
+		res.FillData(info)
+		//res = token.NewTokenData(info)
 		return nil
 	}
 	return errors.New("refresh is empty")
