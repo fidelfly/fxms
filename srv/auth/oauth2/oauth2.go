@@ -1,14 +1,16 @@
 package oauth2
 
 import (
+	"github.com/fidelfly/fxgo/authx"
 	"github.com/micro/go-micro"
+	"gopkg.in/oauth2.v3"
 
 	"github.com/fidelfly/fxms/mskit/db"
 )
 
-var tokenStore *dbStore
+var tokenStore oauth2.TokenStore
 
-func GetTokenStore() *dbStore {
+func GetTokenStore() oauth2.TokenStore {
 	return tokenStore
 }
 
@@ -18,6 +20,6 @@ func Initializer(instance *db.Config) micro.Option {
 		if err != nil {
 			return
 		}
-		tokenStore = store
+		tokenStore = authx.NewMultiLevelTokenStore(authx.NewMemoryTokenStore(), store)
 	}
 }

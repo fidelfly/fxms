@@ -1,15 +1,16 @@
-package whdr
+package wbr
 
 import (
 	"net/http"
 
+	"github.com/fidelfly/fxgo"
 	"github.com/micro/go-micro/metadata"
 
 	"github.com/fidelfly/fxms/mskit/msctx"
 )
 
 func MsHandler(handler http.Handler) http.Handler {
-	return TraceMiddleware(handler)
+	return fxgo.AttachMiddleware(handler, TraceMiddleware)
 }
 
 func MsHandlerFunc(handlerFunc http.HandlerFunc) http.HandlerFunc {

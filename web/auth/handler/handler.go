@@ -9,14 +9,14 @@ import (
 	"github.com/fidelfly/fxgo/logx"
 
 	"github.com/fidelfly/fxms/mskit/rpcc"
-	"github.com/fidelfly/fxms/mskit/whdr"
+	"github.com/fidelfly/fxms/mskit/wbr"
 	"github.com/fidelfly/fxms/srv/auth/proto/auth"
 )
 
 func AuthCall(w http.ResponseWriter, r *http.Request) {
 	logx.Debug("Calling Web Auth call....")
-	logx.Infof("TraceID = %s", whdr.GetTraceID(r))
-	logx.Infof("Call From Service = %s", whdr.GetFromService(r))
+	logx.Infof("TraceID = %s", wbr.GetTraceID(r))
+	logx.Infof("Call From Service = %s", wbr.GetFromService(r))
 	// decode the incoming request as json
 	var request map[string]interface{}
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {

@@ -1,4 +1,4 @@
-package whdr
+package wbr
 
 import (
 	"net/http"

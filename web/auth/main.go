@@ -5,7 +5,7 @@ import (
 	"github.com/micro/go-micro/web"
 
 	"github.com/fidelfly/fxms/mskit"
-	"github.com/fidelfly/fxms/mskit/whdr"
+	"github.com/fidelfly/fxms/mskit/wbr"
 	"github.com/fidelfly/fxms/web/auth/config"
 	"github.com/fidelfly/fxms/web/auth/handler"
 	"github.com/fidelfly/fxms/web/auth/oauth2"
@@ -30,9 +30,9 @@ func main() {
 	}
 
 	// register call handler
-	service.HandleFunc("/auth/call", whdr.MsHandlerFunc(handler.AuthCall))
+	service.HandleFunc("/auth/call", wbr.MsHandlerFunc(handler.AuthCall))
 
-	service.HandleFunc("/auth/token", whdr.MsHandlerFunc(oauth2.TokenHandler))
+	service.HandleFunc("/auth/token", wbr.MsHandlerFunc(oauth2.TokenHandler))
 
 	// run service
 	if err := service.Run(); err != nil {
