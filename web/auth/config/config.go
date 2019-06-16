@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/fidelfly/fxms/mskit/conf"
+	"github.com/fidelfly/fxms/mspkg/conf"
 	"github.com/fidelfly/fxms/web/auth/oauth2"
 )
 

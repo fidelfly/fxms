@@ -5,19 +5,30 @@ option go_package="github.com/fidelfly/fxms/srv/auth/proto/token";
 
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
-import "mskit/proto/base/base.proto";
-import "mskit/proto/api/api.proto";
+import "mspkg/proto/base/base.proto";
+import "mspkg/proto/api/api.proto";
 
 service Token {
 	rpc Create (TokenData) returns (google.protobuf.Empty) {}
 
-	rpc RemoveByCode (mskit.base.StringValue) returns (google.protobuf.Empty) {}
-	rpc RemoveByAccess (mskit.base.StringValue) returns (google.protobuf.Empty) {}
-	rpc RemoveByRefresh (mskit.base.StringValue) returns (google.protobuf.Empty) {}
+	rpc RemoveByCode (mspkg.base.StringValue) returns (google.protobuf.Empty) {}
+	rpc RemoveByAccess (mspkg.base.StringValue) returns (google.protobuf.Empty) {}
+	rpc RemoveByRefresh (mspkg.base.StringValue) returns (google.protobuf.Empty) {}
 
-	rpc GetByCode (mskit.base.StringValue) returns (TokenData) {}
-	rpc GetByAccess (mskit.base.StringValue) returns (TokenData) {}
-	rpc GetByRefresh (mskit.base.StringValue) returns (TokenData) {}
+	rpc GetByCode (mspkg.base.StringValue) returns (TokenData) {}
+	rpc GetByAccess (mspkg.base.StringValue) returns (TokenData) {}
+	rpc GetByRefresh (mspkg.base.StringValue) returns (TokenData) {}
+
+	rpc Validate(TokenRequest) returns (ValidationResponse) {}
+}
+
+message TokenRequest {
+	string access_token = 1;
+}
+
+message ValidationResponse {
+	mspkg.api.ErrorMessage err = 1;
+	TokenData token_info = 2;
 }
 
 message TokenData {

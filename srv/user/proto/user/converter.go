@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/fidelfly/fxms/mskit/proto"
+	"github.com/fidelfly/fxms/mspkg/proto"
 	"github.com/fidelfly/fxms/srv/user/res"
 )
 

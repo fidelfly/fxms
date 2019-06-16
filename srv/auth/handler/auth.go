@@ -6,7 +6,7 @@ import (
 	"github.com/fidelfly/fxgo/logx"
 	"github.com/micro/go-micro/util/log"
 
-	"github.com/fidelfly/fxms/mskit/msctx"
+	"github.com/fidelfly/fxms/mspkg/msctx"
 	"github.com/fidelfly/fxms/srv/auth/proto/auth"
 )
 

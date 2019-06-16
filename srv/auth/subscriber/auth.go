@@ -2,9 +2,10 @@ package subscriber
 
 import (
 	"context"
+
 	"github.com/micro/go-micro/util/log"
 
-	auth "github.com/fidelfly/fxms/srv/auth/proto/auth"
+	"github.com/fidelfly/fxms/srv/auth/proto/auth"
 )
 
 type Auth struct{}

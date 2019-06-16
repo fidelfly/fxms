@@ -6,8 +6,8 @@ import (
 
 	"github.com/micro/go-micro/util/log"
 
-	"github.com/fidelfly/fxms/mskit/db"
-	"github.com/fidelfly/fxms/mskit/proto/api"
+	"github.com/fidelfly/fxms/mspkg/db"
+	"github.com/fidelfly/fxms/mspkg/proto/api"
 	"github.com/fidelfly/fxms/srv/user/proto/user"
 	"github.com/fidelfly/fxms/srv/user/res"
 )

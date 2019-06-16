@@ -3,15 +3,45 @@ package handler
 import (
 	"context"
 	"errors"
+	"time"
 
+	"github.com/fidelfly/fxgo/authx"
 	"github.com/golang/protobuf/ptypes/empty"
 
-	"github.com/fidelfly/fxms/mskit/proto/base"
+	"github.com/fidelfly/fxms/mspkg/proto/api"
+	"github.com/fidelfly/fxms/mspkg/proto/base"
 	"github.com/fidelfly/fxms/srv/auth/oauth2"
 	"github.com/fidelfly/fxms/srv/auth/proto/token"
 )
 
 type Token struct{}
+
+func (t *Token) Validate(ctx context.Context, req *token.TokenRequest, rsp *token.ValidationResponse) error {
+	access := req.AccessToken
+	if len(access) == 0 {
+		rsp.Err = &api.ErrorMessage{ErrCode: authx.UnauthorizedErrorCode, ErrMessage: "access token is empty"}
+		return nil
+	}
+
+	ti, err := oauth2.GetTokenStore().GetByAccess(access)
+	if err != nil {
+		return err
+	}
+	ct := time.Now()
+	if ti == nil || ti.GetAccess() != access {
+		rsp.Err = &api.ErrorMessage{ErrCode: authx.UnauthorizedErrorCode, ErrMessage: "access token is invalid"}
+		return nil
+	} else if ti.GetRefresh() != "" && ti.GetRefreshCreateAt().Add(ti.GetRefreshExpiresIn()).Before(ct) {
+		rsp.Err = &api.ErrorMessage{ErrCode: authx.UnauthorizedErrorCode, ErrMessage: "refresh token is expired"}
+		return nil
+	} else if ti.GetAccessCreateAt().Add(ti.GetAccessExpiresIn()).Before(ct) {
+		rsp.Err = &api.ErrorMessage{ErrCode: authx.TokenExpiredErrorCode, ErrMessage: "access token is expired"}
+		return nil
+	}
+
+	rsp.TokenInfo = token.NewTokenData(ti)
+	return nil
+}
 
 func (t *Token) Create(ctx context.Context, req *token.TokenData, resp *empty.Empty) error {
 	if req != nil {

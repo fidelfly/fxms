@@ -5,10 +5,11 @@ package user
 
 import (
 	fmt "fmt"
-	api "github.com/fidelfly/fxms/mskit/proto/api"
+	math "math"
+
+	api "github.com/fidelfly/fxms/mspkg/proto/api"
 	proto "github.com/golang/protobuf/proto"
 	timestamp "github.com/golang/protobuf/ptypes/timestamp"
-	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.

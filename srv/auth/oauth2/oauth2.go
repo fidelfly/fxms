@@ -5,7 +5,7 @@ import (
 	"github.com/micro/go-micro"
 	"gopkg.in/oauth2.v3"
 
-	"github.com/fidelfly/fxms/mskit/db"
+	"github.com/fidelfly/fxms/mspkg/db"
 )
 
 var tokenStore oauth2.TokenStore

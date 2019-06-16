@@ -4,7 +4,7 @@ import (
 	"github.com/go-xorm/xorm"
 	"gopkg.in/oauth2.v3"
 
-	"github.com/fidelfly/fxms/mskit/db"
+	"github.com/fidelfly/fxms/mspkg/db"
 )
 
 type dbStore struct {

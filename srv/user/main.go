@@ -4,7 +4,6 @@ import (
 	"github.com/fidelfly/fxgo/logx"
 	"github.com/micro/go-micro"
 
-	"github.com/fidelfly/fxms/mskit"
 	"github.com/fidelfly/fxms/srv/user/config"
 	"github.com/fidelfly/fxms/srv/user/handler"
 	"github.com/fidelfly/fxms/srv/user/proto/user"
@@ -21,10 +20,10 @@ func main() {
 
 	// Initialise service
 	service.Init(
-		mskit.ConfigInitializer(config.Current()),
-		mskit.LogInitializer(),
-		mskit.DbInitializer(),
-		mskit.DbSynchronize(new(res.User)),
+		mspkg.ConfigInitializer(config.Current()),
+		mspkg.LogInitializer(),
+		mspkg.DbInitializer(),
+		mspkg.DbSynchronize(new(res.User)),
 	)
 
 	logx.CaptureError(

@@ -6,8 +6,8 @@ import (
 	"github.com/fidelfly/fxgo/authx"
 	"gopkg.in/oauth2.v3"
 
-	"github.com/fidelfly/fxms/mskit/proto/base"
-	"github.com/fidelfly/fxms/mskit/rpcc"
+	"github.com/fidelfly/fxms/mspkg/proto/base"
+	"github.com/fidelfly/fxms/mspkg/rpcc"
 	"github.com/fidelfly/fxms/srv/auth/proto/token"
 )
 

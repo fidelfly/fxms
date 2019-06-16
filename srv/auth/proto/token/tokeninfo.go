@@ -5,7 +5,7 @@ import (
 
 	"gopkg.in/oauth2.v3"
 
-	"github.com/fidelfly/fxms/mskit/proto"
+	"github.com/fidelfly/fxms/mspkg/proto"
 )
 
 type info struct {
@@ -29,20 +29,20 @@ func NewTokenData(info oauth2.TokenInfo) *TokenData {
 		RefreshExpiresIn: int64(info.GetRefreshExpiresIn()),
 	}
 }
-func (td *TokenData) FillData(info oauth2.TokenInfo) {
-	td.ClientId = info.GetClientID()
-	td.UserId = info.GetUserID()
-	td.RedirectUri = info.GetRedirectURI()
-	td.Scope = info.GetScope()
-	td.Code = info.GetCode()
-	td.CodeCreateAt = proto.ToProtoTime(info.GetCodeCreateAt())
-	td.CodeExpiresIn = int64(info.GetCodeExpiresIn())
-	td.Access = info.GetAccess()
-	td.AccessCreateAt = proto.ToProtoTime(info.GetAccessCreateAt())
-	td.AccessExpiresIn = int64(info.GetAccessExpiresIn())
-	td.Refresh = info.GetRefresh()
-	td.RefreshCreateAt = proto.ToProtoTime(info.GetRefreshCreateAt())
-	td.RefreshExpiresIn = int64(info.GetRefreshExpiresIn())
+func (m *TokenData) FillData(info oauth2.TokenInfo) {
+	m.ClientId = info.GetClientID()
+	m.UserId = info.GetUserID()
+	m.RedirectUri = info.GetRedirectURI()
+	m.Scope = info.GetScope()
+	m.Code = info.GetCode()
+	m.CodeCreateAt = proto.ToProtoTime(info.GetCodeCreateAt())
+	m.CodeExpiresIn = int64(info.GetCodeExpiresIn())
+	m.Access = info.GetAccess()
+	m.AccessCreateAt = proto.ToProtoTime(info.GetAccessCreateAt())
+	m.AccessExpiresIn = int64(info.GetAccessExpiresIn())
+	m.Refresh = info.GetRefresh()
+	m.RefreshCreateAt = proto.ToProtoTime(info.GetRefreshCreateAt())
+	m.RefreshExpiresIn = int64(info.GetRefreshExpiresIn())
 }
 
 // NewTokenInfoWrapper create to TokenInfoWrapper model instance

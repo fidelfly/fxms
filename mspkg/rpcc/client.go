@@ -8,8 +8,8 @@ import (
 	"github.com/micro/go-micro/metadata"
 	"github.com/micro/go-micro/registry"
 
-	"github.com/fidelfly/fxms/mskit/msconst"
-	"github.com/fidelfly/fxms/mskit/msctx"
+	"github.com/fidelfly/fxms/mspkg/msconst"
+	"github.com/fidelfly/fxms/mspkg/msctx"
 )
 
 var DefaultClient = NewClient()

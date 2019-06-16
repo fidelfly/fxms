@@ -5,14 +5,16 @@ package user
 
 import (
 	fmt "fmt"
-	api "github.com/fidelfly/fxms/mskit/proto/api"
+	math "math"
+
+	api "github.com/fidelfly/fxms/mspkg/proto/api"
 	proto "github.com/golang/protobuf/proto"
 	_ "github.com/golang/protobuf/ptypes/timestamp"
-	math "math"
 )
 
 import (
 	context "context"
+
 	client "github.com/micro/go-micro/client"
 	server "github.com/micro/go-micro/server"
 )

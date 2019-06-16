@@ -1,4 +1,4 @@
-package mskit
+package mspkg
 
 import (
 	"fmt"
@@ -8,9 +8,9 @@ import (
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/web"
 
-	"github.com/fidelfly/fxms/mskit/conf"
-	"github.com/fidelfly/fxms/mskit/db"
-	"github.com/fidelfly/fxms/mskit/msconst"
+	"github.com/fidelfly/fxms/mspkg/conf"
+	"github.com/fidelfly/fxms/mspkg/db"
+	"github.com/fidelfly/fxms/mspkg/msconst"
 )
 
 //export

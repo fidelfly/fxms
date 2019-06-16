@@ -5,8 +5,8 @@ package token
 
 import (
 	fmt "fmt"
-	_ "github.com/fidelfly/fxms/mskit/proto/api"
-	base "github.com/fidelfly/fxms/mskit/proto/base"
+	_ "github.com/fidelfly/fxms/mspkg/proto/api"
+	base "github.com/fidelfly/fxms/mspkg/proto/base"
 	proto "github.com/golang/protobuf/proto"
 	empty "github.com/golang/protobuf/ptypes/empty"
 	_ "github.com/golang/protobuf/ptypes/timestamp"
@@ -45,6 +45,7 @@ type TokenService interface {
 	GetByCode(ctx context.Context, in *base.StringValue, opts ...client.CallOption) (*TokenData, error)
 	GetByAccess(ctx context.Context, in *base.StringValue, opts ...client.CallOption) (*TokenData, error)
 	GetByRefresh(ctx context.Context, in *base.StringValue, opts ...client.CallOption) (*TokenData, error)
+	Validate(ctx context.Context, in *TokenRequest, opts ...client.CallOption) (*ValidationResponse, error)
 }
 
 type tokenService struct {
@@ -135,6 +136,16 @@ func (c *tokenService) GetByRefresh(ctx context.Context, in *base.StringValue, o
 	return out, nil
 }
 
+func (c *tokenService) Validate(ctx context.Context, in *TokenRequest, opts ...client.CallOption) (*ValidationResponse, error) {
+	req := c.c.NewRequest(c.name, "Token.Validate", in)
+	out := new(ValidationResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Token service
 
 type TokenHandler interface {
@@ -145,6 +156,7 @@ type TokenHandler interface {
 	GetByCode(context.Context, *base.StringValue, *TokenData) error
 	GetByAccess(context.Context, *base.StringValue, *TokenData) error
 	GetByRefresh(context.Context, *base.StringValue, *TokenData) error
+	Validate(context.Context, *TokenRequest, *ValidationResponse) error
 }
 
 func RegisterTokenHandler(s server.Server, hdlr TokenHandler, opts ...server.HandlerOption) error {
@@ -156,6 +168,7 @@ func RegisterTokenHandler(s server.Server, hdlr TokenHandler, opts ...server.Han
 		GetByCode(ctx context.Context, in *base.StringValue, out *TokenData) error
 		GetByAccess(ctx context.Context, in *base.StringValue, out *TokenData) error
 		GetByRefresh(ctx context.Context, in *base.StringValue, out *TokenData) error
+		Validate(ctx context.Context, in *TokenRequest, out *ValidationResponse) error
 	}
 	type Token struct {
 		token
@@ -194,4 +207,8 @@ func (h *tokenHandler) GetByAccess(ctx context.Context, in *base.StringValue, ou
 
 func (h *tokenHandler) GetByRefresh(ctx context.Context, in *base.StringValue, out *TokenData) error {
 	return h.TokenHandler.GetByRefresh(ctx, in, out)
+}
+
+func (h *tokenHandler) Validate(ctx context.Context, in *TokenRequest, out *ValidationResponse) error {
+	return h.TokenHandler.Validate(ctx, in, out)
 }

@@ -4,32 +4,32 @@ package com.fxms.srv.user;
 option go_package="github.com/fidelfly/fxms/srv/proto/user";
 
 import "google/protobuf/timestamp.proto";
-import "mskit/proto/api/api.proto";
+import "mspkg/proto/api/api.proto";
 
 service User {
 	rpc Call(Request) returns (Response) {}
 	rpc Stream(StreamingRequest) returns (stream StreamingResponse) {}
 	rpc PingPong(stream Ping) returns (stream Pong) {}
 
-	rpc Create(CreateRequest) returns (mskit.api.IdResponse) {}
-	rpc Update(UpdateRequest) returns (mskit.api.IdResponse) {}
+	rpc Create(CreateRequest) returns (mspkg.api.IdResponse) {}
+	rpc Update(UpdateRequest) returns (mspkg.api.IdResponse) {}
 	rpc Read(ReadRequest) returns (UserData) {}
-	rpc Delete(DeleteRequest) returns (mskit.api.IdResponse) {}
+	rpc Delete(DeleteRequest) returns (mspkg.api.IdResponse) {}
 }
 
 message CreateRequest {
-	mskit.api.Request req_info = 1;
+	mspkg.api.Request req_info = 1;
 	UserData data = 2;
 }
 
 message UpdateRequest {
-	mskit.api.Request req_info = 1;
-	mskit.api.UpdateInfo limit = 2;
+	mspkg.api.Request req_info = 1;
+	mspkg.api.UpdateInfo limit = 2;
 	UserData data = 3;
 }
 
 message ReadRequest {
-	mskit.api.Request req_info = 1;
+	mspkg.api.Request req_info = 1;
 	int64 id = 2;
 }
 

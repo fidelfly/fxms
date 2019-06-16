@@ -8,8 +8,8 @@ import (
 
 	"github.com/fidelfly/fxgo/logx"
 
-	"github.com/fidelfly/fxms/mskit/rpcc"
-	"github.com/fidelfly/fxms/mskit/wbr"
+	"github.com/fidelfly/fxms/mspkg/rpcc"
+	"github.com/fidelfly/fxms/mspkg/wbr"
 	"github.com/fidelfly/fxms/srv/auth/proto/auth"
 )
 

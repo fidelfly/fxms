@@ -6,7 +6,7 @@ import (
 	"github.com/fidelfly/fxgo"
 	"github.com/micro/go-micro/metadata"
 
-	"github.com/fidelfly/fxms/mskit/msctx"
+	"github.com/fidelfly/fxms/mspkg/msctx"
 )
 
 func MsHandler(handler http.Handler) http.Handler {

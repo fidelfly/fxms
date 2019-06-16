@@ -4,8 +4,8 @@ import (
 	"github.com/fidelfly/fxgo/logx"
 	"github.com/micro/go-micro/web"
 
-	"github.com/fidelfly/fxms/mskit"
-	"github.com/fidelfly/fxms/mskit/wbr"
+	"github.com/fidelfly/fxms/mspkg"
+	"github.com/fidelfly/fxms/mspkg/wbr"
 	"github.com/fidelfly/fxms/web/auth/config"
 	"github.com/fidelfly/fxms/web/auth/handler"
 	"github.com/fidelfly/fxms/web/auth/oauth2"
@@ -20,9 +20,9 @@ func main() {
 
 	// initialise service
 	if err := service.Init(
-		mskit.WebServiceInitiallizer(),
-		mskit.WebConfigInitializer(config.Current()),
-		mskit.WebLogInitializer(),
+		mspkg.WebServiceInitiallizer(),
+		mspkg.WebConfigInitializer(config.Current()),
+		mspkg.WebLogInitializer(),
 		oauth2.Initializer(config.AuthCfg),
 	); err != nil {
 		logx.Panic(err)

@@ -1,4 +1,4 @@
-package mskit
+package mspkg
 
 import (
 	"fmt"
