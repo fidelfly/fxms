@@ -4,17 +4,23 @@ import (
 	"context"
 	"errors"
 
+	"github.com/fidelfly/fxgo/pkg/strh"
 	"github.com/micro/go-micro/util/log"
 
 	"github.com/fidelfly/fxms/mspkg/db"
 	"github.com/fidelfly/fxms/mspkg/proto/api"
 	"github.com/fidelfly/fxms/srv/user/proto/user"
+	"github.com/fidelfly/fxms/srv/user/pwd"
 	"github.com/fidelfly/fxms/srv/user/res"
 )
 
 type User struct{}
 
-func (e *User) Delete(ctx context.Context, req *user.DeleteRequest, rsp *api.IdResponse) error {
+func (e *User) Validate(ctx context.Context, req *user.ValidateRequest, rsp *user.UserData) error {
+	panic("implement me")
+}
+
+func (e *User) Delete(ctx context.Context, req *api.IdResponse, rsp *api.IdResponse) error {
 	if req.Id <= 0 {
 		return errors.New("invalid value of id")
 	}
@@ -28,7 +34,7 @@ func (e *User) Delete(ctx context.Context, req *user.DeleteRequest, rsp *api.IdR
 	return nil
 }
 
-func (e *User) Read(ctx context.Context, req *user.ReadRequest, rsp *user.UserData) error {
+func (e *User) Read(ctx context.Context, req *api.IdResponse, rsp *user.UserData) error {
 	if req.Id <= 0 {
 		return errors.New("invalid value of id")
 	}
@@ -37,7 +43,7 @@ func (e *User) Read(ctx context.Context, req *user.ReadRequest, rsp *user.UserDa
 	if _, err := db.Read(data); err != nil {
 		return err
 	}
-	rsp = user.NewData(data)
+	rsp = user.NewData(data, true)
 	return nil
 }
 
@@ -45,7 +51,21 @@ func (e *User) Update(ctx context.Context, req *user.UpdateRequest, rsp *api.IdR
 	if req.Data == nil {
 		return errors.New("data is empty")
 	}
-	id, err := db.Update(user.NewResource(req.Data))
+	pwdChange := len(req.Data.Password) > 0
+	opts := make([]db.QueryOption, 0)
+	if req.Limit != nil {
+		if req.Limit.Id > 0 {
+			opts = append(opts, db.ID(req.Limit.Id))
+		}
+		if len(req.Limit.Cols) > 0 {
+			opts = append(opts, db.Cols(req.Limit.Cols...))
+			pwdChange = strh.IndexOfSlice(req.Limit.Cols, "password") >= 0
+		}
+	}
+	if pwdChange {
+		req.Data.Password = pwd.EncodePwd(req.Data.Code, req.Data.Password)
+	}
+	id, err := db.Update(user.NewResource(req.Data), opts...)
 	if err != nil {
 		return err
 	}
@@ -53,11 +73,12 @@ func (e *User) Update(ctx context.Context, req *user.UpdateRequest, rsp *api.IdR
 	return nil
 }
 
-func (e *User) Create(ctx context.Context, req *user.CreateRequest, rsp *api.IdResponse) error {
-	if req.Data == nil {
+func (e *User) Create(ctx context.Context, req *user.UserData, rsp *api.IdResponse) error {
+	if req == nil {
 		return errors.New("data is empty")
 	}
-	id, err := db.Create(user.NewResource(req.Data))
+	req.Password = pwd.EncodePwd(req.Code, req.Password)
+	id, err := db.Create(user.NewResource(req))
 	if err != nil {
 		return err
 	}

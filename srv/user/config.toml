@@ -1,5 +1,3 @@
-Version = "0.0.1"
-
 LogLevel = "debug"
 
 [Database]
@@ -8,3 +6,14 @@ Port = 3306
 Schema = "fxmsdb"
 User = "fxms"
 Password = "fxms123456"
+
+[Redis]
+Host = "172.31.0.101"
+Port = 6379
+Password = "redis123456"
+
+[Sa]
+Code = "sa"
+Name = "Super Administrator"
+Email = "fidel.xu@gmail.com"
+Password = "sa"

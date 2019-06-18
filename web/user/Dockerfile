@@ -1,5 +1,5 @@
 FROM alpine
 ADD config.toml /config.toml
-ADD auth-web /auth-web
+ADD user-web /user-web
 WORKDIR /
-ENTRYPOINT [ "/auth-web" ]
+ENTRYPOINT [ "/user-web" ]

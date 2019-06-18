@@ -11,6 +11,7 @@ import (
 	"github.com/fidelfly/fxms/mspkg/conf"
 	"github.com/fidelfly/fxms/mspkg/db"
 	"github.com/fidelfly/fxms/mspkg/msconst"
+	"github.com/fidelfly/fxms/mspkg/rdcache"
 )
 
 //export
@@ -65,6 +66,7 @@ func DbInitializer(cfgs ...*db.Config) micro.Option {
 	}
 }
 
+//export
 func DbSynchronize(targets ...interface{}) micro.Option {
 	return func(options *micro.Options) {
 		if db.Engine == nil {
@@ -132,8 +134,25 @@ func ServiceInitiallizer() micro.Option {
 	}
 }
 
+//export
 func WebServiceInitiallizer() web.Option {
 	return func(options *web.Options) {
 		msconst.WebConstOption(options)
+	}
+}
+
+//export
+func CacheInitializer(cfg *rdcache.Config) micro.Option {
+	return func(options *micro.Options) {
+		rdcache.InitRedis(cfg)
+		rdcache.InitCache(rdcache.Redisdb)
+	}
+}
+
+//export
+func WebCacheInitializer(cfg *rdcache.Config) web.Option {
+	return func(options *web.Options) {
+		rdcache.InitRedis(cfg)
+		rdcache.InitCache(rdcache.Redisdb)
 	}
 }

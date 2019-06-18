@@ -5,7 +5,7 @@ import (
 	"github.com/fidelfly/fxms/srv/user/res"
 )
 
-func NewResource(data *UserData) *res.User {
+func NewResource(data *UserData, skipPwd ...bool) *res.User {
 	if data == nil {
 		return nil
 	}
@@ -18,10 +18,13 @@ func NewResource(data *UserData) *res.User {
 		UpdateTime: proto.ToTime(data.UpdateTime),
 		CreateTime: proto.ToTime(data.CreateTime),
 	}
+	if len(skipPwd) > 0 && skipPwd[0] {
+		user.Password = ""
+	}
 	return user
 }
 
-func NewData(user *res.User) *UserData {
+func NewData(user *res.User, skipPwd ...bool) *UserData {
 	if user == nil {
 		return nil
 	}
@@ -34,6 +37,10 @@ func NewData(user *res.User) *UserData {
 		Avatar:     user.Avatar,
 		CreateTime: proto.ToProtoTime(user.CreateTime),
 		UpdateTime: proto.ToProtoTime(user.UpdateTime),
+	}
+
+	if len(skipPwd) > 0 && skipPwd[0] {
+		data.Password = ""
 	}
 
 	return data

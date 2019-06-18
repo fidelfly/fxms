@@ -11,30 +11,27 @@ service User {
 	rpc Stream(StreamingRequest) returns (stream StreamingResponse) {}
 	rpc PingPong(stream Ping) returns (stream Pong) {}
 
-	rpc Create(CreateRequest) returns (mspkg.api.IdResponse) {}
+	rpc Create(UserData) returns (mspkg.api.IdResponse) {}
 	rpc Update(UpdateRequest) returns (mspkg.api.IdResponse) {}
-	rpc Read(ReadRequest) returns (UserData) {}
-	rpc Delete(DeleteRequest) returns (mspkg.api.IdResponse) {}
+	rpc Read(mspkg.api.IdResponse) returns (UserData) {}
+	rpc Delete(mspkg.api.IdResponse) returns (mspkg.api.IdResponse) {}
+
+	rpc Validate(ValidateRequest) returns (UserData) {}
 }
 
-message CreateRequest {
-	mspkg.api.Request req_info = 1;
-	UserData data = 2;
+message ValidateRequest {
+	string code = 1;
+	string email = 2;
+	string password = 3;
 }
+
+/*message CreateRequest {
+	UserData data = 2;
+}*/
 
 message UpdateRequest {
-	mspkg.api.Request req_info = 1;
-	mspkg.api.UpdateInfo limit = 2;
-	UserData data = 3;
-}
-
-message ReadRequest {
-	mspkg.api.Request req_info = 1;
-	int64 id = 2;
-}
-
-message DeleteRequest {
-	int64 id = 2;
+	mspkg.api.UpdateInfo limit = 1;
+	UserData data = 2;
 }
 
 message UserData {

@@ -1,0 +1,6 @@
+LogLevel = "debug"
+
+[Redis]
+Host = "172.31.0.101"
+Port = 6379
+Password = "redis123456"

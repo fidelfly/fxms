@@ -10,6 +10,8 @@ import (
 
 const CtxTraceID = "Trace-Id"
 
+const CtxUserID = "User-Id"
+
 func SetMetadata(ctx context.Context, data metadata.Metadata) context.Context {
 	// copy metadata
 	mda, _ := metadata.FromContext(ctx)
@@ -23,22 +25,30 @@ func SetMetadata(ctx context.Context, data metadata.Metadata) context.Context {
 	return metadata.NewContext(ctx, md)
 }
 
-func GetFromService(ctx context.Context) string {
+//export
+func GetMetaValue(ctx context.Context, key string) (string, bool) {
 	mda, _ := metadata.FromContext(ctx)
-	if name, ok := mda[micro.HeaderPrefix+"From-Service"]; ok {
-		return name
+	if name, ok := mda[key]; ok {
+		return name, ok
 	}
-	return ""
+	return "", false
+}
+
+func GetFromService(ctx context.Context) string {
+	name, _ := GetMetaValue(ctx, micro.HeaderPrefix+"From-Service")
+	return name
 }
 
 func GetTraceID(ctx context.Context) string {
-	mda, _ := metadata.FromContext(ctx)
-	if id, ok := mda[CtxTraceID]; ok {
-		return id
-	}
-	return ""
+	id, _ := GetMetaValue(ctx, CtxTraceID)
+	return id
 }
 
 func GenerateTraceID() string {
 	return uuid.NewV4().String()
+}
+
+func GetUserID(ctx context.Context) string {
+	uid, _ := GetMetaValue(ctx, CtxUserID)
+	return uid
 }

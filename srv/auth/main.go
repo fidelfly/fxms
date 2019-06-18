@@ -26,10 +26,11 @@ func main() {
 
 	// Initialise service
 	service.Init(
-		mspkg.ServiceInitiallizer(),
-		mspkg.ConfigInitializer(config.Current()),
-		mspkg.LogInitializer(),
-		oauth2.Initializer(config.Database),
+		mspkg.ServiceInitiallizer(),               // Initialize service
+		mspkg.ConfigInitializer(config.Current()), // Read configuration
+		mspkg.LogInitializer(),                    // Initialize log api
+		mspkg.CacheInitializer(config.RedisCfg),   // Initialize cache api
+		oauth2.Initializer(config.Database),       // Initialize token storage
 	)
 
 	logx.CaptureError(
