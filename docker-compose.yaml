@@ -63,38 +63,38 @@ services:
     ports:
       - "8082:8082"
 
-################################   auth-srv   ##############################
-#  auth-srv:
-#    command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10
-#    build: ./srv/auth
-#    container_name: auth-srv
-#    networks:
-#      - mynet
-#    depends_on:
-#      - db
-################################   user-srv   ##############################
-#  user-srv:
-#    command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10
-#    build: ./srv/user
-#    container_name: user-srv
-#    networks:
-#      - mynet
-#    depends_on:
-#      - db
-################################   auth-web   ##############################
-  auth-web:
+################################   auth_srv   ##############################
+  auth_srv:
     command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10
-    build: ./web/auth
+    build: ./srv/auth
+    container_name: auth_srv
     networks:
       - mynet
-################################  center-web  ##############################
-  center-web:
+    depends_on:
+      - db
+################################   user_srv   ##############################
+#  user_srv:
+#    command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10
+#    build: ./srv/user
+#    container_name: user_srv
+#    networks:
+#      - mynet
+#    depends_on:
+#      - db
+################################   auth_web   ##############################
+#  auth_web:
+#    command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10
+#    build: ./web/auth
+#    networks:
+#      - mynet
+################################  center_web  ##############################
+  center_web:
     command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10
     build: ./web/center
     networks:
       - mynet
-################################   user-web   ##############################
-  user-web:
+################################   user_web   ##############################
+  user_web:
     command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10
     build: ./web/user
     networks:
@@ -105,19 +105,19 @@ services:
 #**************************************************************************#
 
 
-############################  auth-srv-debug  ##############################
-  auth-srv-debug:
-    command: -- --registry_address=registry:8500 --register_interval=5 --register_ttl=10
-    build:
-      context: srv/auth
-      dockerfile: Dockerfile.debug
-    privileged: true
-    networks:
-      - mynet
-    ports:
-      - "40001:40000"
-############################  user-srv-debug  ##############################
-  user-srv-debug:
+############################  auth_srv_debug  ##############################
+#  auth_srv_debug:
+#    command: -- --registry_address=registry:8500 --register_interval=5 --register_ttl=10
+#    build:
+#      context: srv/auth
+#      dockerfile: Dockerfile.debug
+#    privileged: true
+#    networks:
+#      - mynet
+#    ports:
+#      - "40001:40000"
+############################  user_srv_debug  ##############################
+  user_srv_debug:
     command: -- --registry_address=registry:8500 --register_interval=5 --register_ttl=10
     build:
       context: srv/user
@@ -127,8 +127,8 @@ services:
       - mynet
     ports:
       - "40002:40000"
-###########################  center-web-debug  #############################
-#  center-web-debug:
+###########################  center_web_debug  #############################
+#  center_web_debug:
 #    command: -- --registry_address=registry:8500 --register_interval=5 --register_ttl=10
 #    build:
 #      context: web/center
@@ -138,20 +138,19 @@ services:
 #      - mynet
 #    ports:
 #      - "50000:40000"
-############################  auth-web-debug  ##############################
-#  auth-web-debug:
-#    command: -- --registry_address=registry:8500 --register_interval=5 --register_ttl=10
-#    build:
-#      context: web/auth
-#      dockerfile: Dockerfile.debug
-#    container_name: auth-web
-#    privileged: true
-#    networks:
-#      - mynet
-#    ports:
-#      - "50001:40000"
-############################  user-web-debug  ##############################
-#  user-web-debug:
+############################  auth_web_debug  ##############################
+  auth_web_debug:
+    command: -- --registry_address=registry:8500 --register_interval=5 --register_ttl=10
+    build:
+      context: web/auth
+      dockerfile: Dockerfile.debug
+    privileged: true
+    networks:
+      - mynet
+    ports:
+      - "50001:40000"
+############################  user_web_debug  ##############################
+#  user_web_debug:
 #    command: -- --registry_address=registry:8500 --register_interval=5 --register_ttl=10
 #    build:
 #      context: web/user

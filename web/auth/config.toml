@@ -1,9 +1,10 @@
-Version = "0.0.1"
+Stage = "development"
 
-LogLevel = "debug"
+[Log]
+Level = "debug"
 
 [Auth]
     [[Auth.Clients]]
-    ID = "fxms"
-    Secret = "fxmssecret"
+    ID = "fxras"
+    Secret = "fxras123456"
     Domain = "https://127.0.0.1:8080"

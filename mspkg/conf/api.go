@@ -1,13 +1,34 @@
 package conf
 
+const (
+	StageDevelopment = "development"
+	//StageProduction
+	StageProduction = "production"
+)
+
 type MsConfig struct {
-	LogLevel string
+	Log   LogConfig
+	Stage string
 }
 
-func (mc MsConfig) GetLogLevel() string {
-	return mc.LogLevel
+type LogConfig struct {
+	Level string
+	Path  string
+}
+
+func (lc LogConfig) GetLevel() string {
+	return lc.Level
+}
+
+func (mc MsConfig) GetLog() LogConfig {
+	return mc.Log
+}
+
+func (mc MsConfig) GetStage() string {
+	return mc.Stage
 }
 
 type MsConfigurable interface {
-	GetLogLevel() string
+	GetLog() *LogConfig
+	GetStage() string
 }

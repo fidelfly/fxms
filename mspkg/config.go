@@ -7,14 +7,14 @@ import (
 
 var msCfg interface{}
 
-func GetLogLevel() string {
+func GetLogCfg() *conf.LogConfig {
 	if msCfg == nil {
-		return ""
+		return nil
 	}
 	if ms, ok := msCfg.(conf.MsConfigurable); ok {
-		return ms.GetLogLevel()
+		return ms.GetLog()
 	}
-	return ""
+	return nil
 }
 
 func GetDbConfig() *db.Config {
@@ -25,4 +25,14 @@ func GetDbConfig() *db.Config {
 		return cfg.GetDbConfig()
 	}
 	return nil
+}
+
+func IsDebug() bool {
+	if msCfg == nil {
+		return false
+	}
+	if cfg, ok := msCfg.(conf.MsConfigurable); ok {
+		return cfg.GetStage() == conf.StageDevelopment
+	}
+	return false
 }

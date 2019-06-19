@@ -17,7 +17,30 @@ import (
 type User struct{}
 
 func (e *User) Validate(ctx context.Context, req *user.ValidateRequest, rsp *user.UserData) error {
-	panic("implement me")
+	if (len(req.Code) == 0 && len(req.Email) == 0) || len(req.Password) == 0 {
+		return errors.New("invalid user or password")
+	}
+	user := &res.User{}
+	if len(req.Code) == 0 {
+		user.Email = req.Email
+		if ok, _ := db.Read(user); ok {
+			encodePwd := pwd.EncodePwd(user.Code, req.Password)
+			if encodePwd == user.Password {
+				rsp.FillData(user, true)
+				return nil
+			}
+		}
+		return errors.New("invalid user or password")
+	}
+	user.Code = req.Code
+	user.Password = pwd.EncodePwd(user.Code, req.Password)
+
+	if ok, _ := db.Read(user); ok {
+		rsp.FillData(user)
+		return nil
+	}
+	return errors.New("invalid user or password")
+
 }
 
 func (e *User) Delete(ctx context.Context, req *api.IdResponse, rsp *api.IdResponse) error {

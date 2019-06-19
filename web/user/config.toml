@@ -1,4 +1,7 @@
-LogLevel = "debug"
+Stage = "development"
+
+[Log]
+Level = "debug"
 
 [Redis]
 Host = "172.31.0.101"

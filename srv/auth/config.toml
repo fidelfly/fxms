@@ -1,4 +1,7 @@
-LogLevel = "debug"
+Stage = "development"
+
+[Log]
+Level = "debug"
 
 [Database]
 Host = "172.31.0.100"
@@ -9,6 +12,6 @@ Password = "fxms123456"
 
 [Auth]
     [[Auth.Clients]]
-    ID = "fxms"
-    Secret = "fxmssecret"
+    ID = "fxras"
+    Secret = "fxras123456"
     Domain = "https://127.0.0.1:8080"

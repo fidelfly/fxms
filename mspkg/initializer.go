@@ -3,15 +3,18 @@ package mspkg
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/fidelfly/fxgo/logx"
 	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/web"
 
 	"github.com/fidelfly/fxms/mspkg/conf"
 	"github.com/fidelfly/fxms/mspkg/db"
 	"github.com/fidelfly/fxms/mspkg/msconst"
 	"github.com/fidelfly/fxms/mspkg/rdcache"
+	"github.com/fidelfly/fxms/mspkg/rpcc"
 )
 
 //export
@@ -22,7 +25,9 @@ func LogInitializer(levels ...string) micro.Option {
 			level = levels[0]
 		}
 		if len(level) == 0 {
-			level = GetLogLevel()
+			if logCfg := GetLogCfg(); logCfg != nil {
+				level = logCfg.GetLevel()
+			}
 		}
 		if len(level) == 0 {
 			level = "warning"
@@ -39,7 +44,9 @@ func WebLogInitializer(levels ...string) web.Option {
 			level = levels[0]
 		}
 		if len(level) == 0 {
-			level = GetLogLevel()
+			if logCfg := GetLogCfg(); logCfg != nil {
+				level = logCfg.GetLevel()
+			}
 		}
 		if len(level) == 0 {
 			level = "warning"
@@ -58,7 +65,7 @@ func DbInitializer(cfgs ...*db.Config) micro.Option {
 			cfg = GetDbConfig()
 		}
 		if cfg != nil {
-			db.InitEngine(cfg)
+			logx.CaptureError(db.InitEngine(cfg))
 		} else {
 			logx.Error("database config is not found")
 		}
@@ -74,7 +81,7 @@ func DbSynchronize(targets ...interface{}) micro.Option {
 		}
 
 		if len(targets) > 0 {
-			db.Engine.Sync(targets...)
+			logx.CaptureError(db.Engine.Sync(targets...))
 		}
 	}
 }
@@ -89,7 +96,7 @@ func WebDbInitializer(cfgs ...*db.Config) web.Option {
 			cfg = GetDbConfig()
 		}
 		if cfg != nil {
-			db.InitEngine(cfg)
+			logx.CaptureError(db.InitEngine(cfg))
 		} else {
 			logx.Error("database config is not found")
 		}
@@ -131,6 +138,7 @@ func WebConfigInitializer(cfg interface{}, files ...string) web.Option {
 func ServiceInitiallizer() micro.Option {
 	return func(options *micro.Options) {
 		msconst.ConstOption(options)
+		DebugInit(options)
 	}
 }
 
@@ -138,6 +146,7 @@ func ServiceInitiallizer() micro.Option {
 func WebServiceInitiallizer() web.Option {
 	return func(options *web.Options) {
 		msconst.WebConstOption(options)
+		WebDebugInit(options)
 	}
 }
 
@@ -156,3 +165,30 @@ func WebCacheInitializer(cfg *rdcache.Config) web.Option {
 		rdcache.InitCache(rdcache.Redisdb)
 	}
 }
+
+func DebugInit(options *micro.Options) {
+	debug()
+}
+
+func WebDebugInit(options *web.Options) {
+	debug()
+}
+
+func debug() {
+	if IsDebug() {
+		rpcc.DefaultClient.Init(func(options *client.Options) {
+			options.CallOptions.RequestTimeout = 10 * time.Minute
+		})
+	}
+}
+
+/*//export
+func DebugInitializer() micro.Option {
+	return func(options *micro.Options) {
+		if IsDebug() {
+			rpcc.DefaultClient.Init(func(options *client.Options) {
+				options.CallOptions.RequestTimeout = 10 * time.Minute
+			})
+		}
+	}
+}*/

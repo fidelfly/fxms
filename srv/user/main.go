@@ -24,6 +24,7 @@ func main() {
 		mspkg.ConfigInitializer(config.Current()), // Read configuration
 		mspkg.LogInitializer(),                    // Initial log api
 		mspkg.DbInitializer(),                     // Initial database api
+		mspkg.ServiceInitiallizer(),               // Initialize service
 		mspkg.DbSynchronize(new(res.User)),        // Synchronize tables
 		Initializer(),                             // Other Initial tasks
 	)

@@ -20,9 +20,9 @@ func main() {
 
 	// initialise service
 	if err := service.Init(
-		mspkg.WebServiceInitiallizer(),               // Initialize web service
 		mspkg.WebConfigInitializer(config.Current()), // Read configuration
 		mspkg.WebLogInitializer(),                    // Initialize log api
+		mspkg.WebServiceInitiallizer(),               // Initialize web service
 	); err != nil {
 		log.Fatal(err)
 	}
