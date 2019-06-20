@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/fidelfly/fxgo/httprxr"
-	"github.com/fidelfly/fxgo/routex"
+	"github.com/micro/go-micro/web"
 
 	"github.com/fidelfly/fxms/mskit"
 	"github.com/fidelfly/fxms/mspkg/proto/api"
@@ -13,11 +13,9 @@ import (
 	"github.com/fidelfly/fxms/srv/user/proto/user"
 )
 
-var UserHandler *routex.Router
-
 var userServer user.UserService
 
-func init() {
+func UserHandler(service web.Service) {
 	userServer = user.NewUserService("com.fxms.srv.user", rpcc.DefaultClient)
 
 	rr := mskit.NewWebRouter("/user")
@@ -25,7 +23,7 @@ func init() {
 
 	rr.Methods(http.MethodGet).Path("/{id}").HandlerFunc(GetUser)
 
-	UserHandler = rr
+	service.Handle("/user", rr)
 }
 
 func GetUser(w http.ResponseWriter, r *http.Request) {

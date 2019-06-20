@@ -4,6 +4,7 @@ import (
 	"github.com/micro/go-micro/util/log"
 
 	"github.com/fidelfly/fxms/mspkg"
+	"github.com/fidelfly/fxms/mspkg/wbr"
 	"github.com/fidelfly/fxms/web/user/config"
 
 	"github.com/micro/go-micro/web"
@@ -30,8 +31,7 @@ func main() {
 	// register call handler
 	service.HandleFunc("/user/call", handler.UserCall)
 
-	service.Handle("/user", handler.UserHandler)
-
+	wbr.RegisterRoute(service, handler.UserHandler)
 	// run service
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
