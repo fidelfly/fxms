@@ -1,14 +1,15 @@
 package oauth2
 
 import (
-	"net/http"
-
+	"github.com/fidelfly/fxgo"
 	"github.com/fidelfly/fxgo/authx"
 	"github.com/fidelfly/fxgo/logx"
 	"github.com/micro/go-micro/web"
 )
 
-var server *authx.Server
+//var server *authx.Server
+
+var TokenIssuer *fxgo.TokenIssuer
 
 func setupAuthServer(authCfg *Config) (server *authx.Server, err error) {
 	server = authx.NewOAuthServer()
@@ -31,11 +32,7 @@ func Initializer(authCfg *Config) web.Option {
 			logx.Panic(err)
 			panic(err)
 		} else {
-			server = as
+			TokenIssuer = fxgo.NewTokenIssuer(as, "")
 		}
 	}
-}
-
-func TokenHandler(w http.ResponseWriter, r *http.Request) {
-	server.HandleTokenRequest(w, r)
 }

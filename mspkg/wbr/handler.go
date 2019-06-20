@@ -15,14 +15,8 @@ func MsHandler(handler http.Handler) http.Handler {
 	return fxgo.AttachMiddleware(handler, TraceMiddleware)
 }
 
-func MsHandlerFunc(handlerFunc http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
-		ctx = msctx.SetMetadata(ctx, metadata.Metadata{
-			msctx.CtxTraceID: msctx.GenerateTraceID(),
-		})
-		handlerFunc(w, r.WithContext(ctx))
-	}
+func MsHandlerFunc(handlerFunc http.HandlerFunc) http.Handler {
+	return fxgo.AttachFuncMiddleware(handlerFunc, TraceMiddleware)
 }
 
 func TraceMiddleware(handler http.Handler) http.Handler {

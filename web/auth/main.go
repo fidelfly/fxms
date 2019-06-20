@@ -30,9 +30,10 @@ func main() {
 	}
 
 	// register call handler
-	service.HandleFunc("/auth/call", wbr.MsHandlerFunc(handler.AuthCall))
+	service.Handle("/auth/call", wbr.MsHandlerFunc(handler.AuthCall))
 
-	service.HandleFunc("/auth/token", wbr.MsHandlerFunc(oauth2.TokenHandler))
+	//service.HandleFunc("/auth/token", wbr.MsHandlerFunc(oauth2.TokenHandler))
+	wbr.RegisterRoute(service, handler.AuthHandler)
 
 	// run service
 	if err := service.Run(); err != nil {
